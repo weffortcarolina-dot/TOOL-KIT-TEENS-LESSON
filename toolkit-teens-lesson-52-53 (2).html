@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Do You Speak — Teens Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+
+<style>
+:root {
+  --purple: #2D1B69;
+  --pink: #E91E8C;
+  --yellow: #FFD600;
+  --teal: #00C9A7;
+  --bg: #1A0A4A;
+  --card-bg: rgba(255,255,255,0.07);
+  --card-border: rgba(255,255,255,0.12);
+  --text: #F0EAFF;
+  --muted: rgba(240,234,255,0.6);
+  --radius: 18px;
+  --sidebar-w: 260px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(233,30,140,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,201,167,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 60% 20%, rgba(255,214,0,0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ───── SIDEBAR ───── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: rgba(15,5,40,0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--card-border);
+  padding: 24px 16px;
+  z-index: 100;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--yellow);
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--card-border);
+  line-height: 1.3;
+}
+.sidebar-logo span { color: var(--pink); }
+
+.sidebar-badge {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+.nav-section {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 12px 8px 4px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--card-bg); color: var(--text); }
+.nav-btn.active {
+  background: linear-gradient(135deg, rgba(233,30,140,0.3), rgba(45,27,105,0.5));
+  color: var(--yellow);
+  border: 1px solid rgba(233,30,140,0.3);
+}
+.nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
+
+.points-badge {
+  margin-top: auto;
+  background: linear-gradient(135deg, #FFD600, #FF8C00);
+  color: #1A0A4A;
+  border-radius: 14px;
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.points-badge .pts-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  display: block;
+  line-height: 1.1;
+}
+
+/* ───── MAIN ───── */
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  display: none;
+  padding: 40px 32px;
+  animation: fadeIn 0.4s ease;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  margin-bottom: 32px;
+}
+.section-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: var(--yellow);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.section-desc { color: var(--muted); font-size: 0.9rem; max-width: 560px; }
+
+/* ───── CARDS ───── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+.card-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: var(--teal);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ───── VOCAB GRID ───── */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.vocab-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.vocab-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.vocab-card:hover { transform: translateY(-4px) scale(1.03); border-color: var(--pink); }
+.vocab-card:hover::before { opacity: 0.15; }
+.vocab-card.playing { border-color: var(--teal); transform: scale(0.97); }
+.vocab-card.playing::before { opacity: 0.2; background: linear-gradient(135deg, var(--teal), var(--purple)); }
+
+.vocab-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; position: relative; z-index: 1; }
+.vocab-word { font-weight: 800; font-size: 0.88rem; position: relative; z-index: 1; }
+.vocab-sound { font-size: 0.75rem; color: var(--muted); margin-top: 4px; position: relative; z-index: 1; }
+.audio-icon { font-size: 1rem; position: absolute; top: 8px; right: 10px; opacity: 0.4; z-index: 1; }
+
+/* ───── RECORD SECTION ───── */
+.record-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.record-word {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  color: var(--yellow);
+  margin-bottom: 4px;
+}
+.record-steps {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.step-btn {
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 2px solid;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--text);
+}
+.step-btn.listen { border-color: var(--teal); color: var(--teal); }
+.step-btn.listen:hover { background: var(--teal); color: var(--bg); }
+.step-btn.record { border-color: var(--pink); color: var(--pink); }
+.step-btn.record:hover, .step-btn.record.recording { background: var(--pink); color: #fff; }
+.step-btn.score { border-color: var(--yellow); color: var(--yellow); }
+.step-btn.score:hover { background: var(--yellow); color: var(--bg); }
+.step-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.score-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-left: 8px;
+}
+
+/* ───── LISTENING CHALLENGE ───── */
+.challenge-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.challenge-num {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--pink);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.challenge-prompt {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.play-audio-btn {
+  background: linear-gradient(135deg, var(--teal), #00a589);
+  border: none;
+  border-radius: 30px;
+  color: var(--bg);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.play-audio-btn:hover { transform: scale(1.04); }
+.play-audio-btn.played { background: linear-gradient(135deg, #666, #444); }
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.option-btn {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--pink); background: rgba(233,30,140,0.12); }
+.option-btn.correct { border-color: var(--teal) !important; background: rgba(0,201,167,0.2) !important; color: var(--teal); }
+.option-btn.wrong { border-color: #ff4444 !important; background: rgba(255,68,68,0.15) !important; color: #ff7777; }
+.option-btn:disabled { cursor: default; }
+.option-emoji { font-size: 1.3rem; }
+
+.challenge-feedback {
+  display: none;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(0,201,167,0.12);
+  border: 1px solid rgba(0,201,167,0.3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.challenge-feedback.show { display: block; }
+.feedback-wrong {
+  background: rgba(255,68,68,0.1);
+  border-color: rgba(255,68,68,0.3);
+}
+.context-clue {
+  margin-top: 8px;
+  color: var(--yellow);
+  font-size: 0.8rem;
+}
+.context-clue strong { font-weight: 800; }
+
+/* ───── GRAMMAR ───── */
+.grammar-rule-box {
+  background: linear-gradient(135deg, rgba(233,30,140,0.15), rgba(45,27,105,0.3));
+  border: 1px solid rgba(233,30,140,0.3);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.rule-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: var(--pink);
+  margin-bottom: 10px;
+}
+.rule-example {
+  background: rgba(0,0,0,0.25);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  font-family: monospace;
+  color: var(--yellow);
+  font-size: 0.9rem;
+}
+.rule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.dialogue-container {
+  background: rgba(0,0,0,0.2);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.dialogue-title {
+  font-weight: 800;
+  color: var(--pink);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+.dialogue-line {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+.speaker {
+  font-weight: 800;
+  color: var(--teal);
+  font-size: 0.82rem;
+  min-width: 52px;
+  padding-top: 2px;
+}
+.dialogue-text { font-size: 0.9rem; line-height: 1.5; flex: 1; }
+.blank-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--yellow);
+  color: var(--yellow);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0 4px 2px;
+  width: 110px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.blank-input:focus { border-bottom-color: var(--pink); }
+.blank-input.correct { border-bottom-color: var(--teal) !important; color: var(--teal); }
+.blank-input.wrong { border-bottom-color: #ff4444 !important; color: #ff7777; }
+
+.verify-btn {
+  background: linear-gradient(135deg, var(--pink), #c0156d);
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 10px 24px;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: all 0.2s;
+}
+.verify-btn:hover { transform: scale(1.04); }
+.explanation-box {
+  display: none;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(255,214,0,0.1);
+  border: 1px solid rgba(255,214,0,0.25);
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.explanation-box.show { display: block; }
+
+/* ───── SCRAMBLE ───── */
+.scramble-container {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 14px;
+}
+.scramble-context {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.answer-zone {
+  min-height: 50px;
+  background: rgba(255,255,255,0.04);
+  border: 2px dashed var(--card-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+  transition: border-color 0.2s;
+}
+.answer-zone.drag-over { border-color: var(--yellow); }
+.word-chip {
+  background: linear-gradient(135deg, rgba(233,30,140,0.2), rgba(45,27,105,0.4));
+  border: 1px solid rgba(233,30,140,0.4);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.word-chip:hover { transform: scale(1.05); border-color: var(--pink); }
+.word-chip.in-answer {
+  background: linear-gradient(135deg, rgba(0,201,167,0.2), rgba(45,27,105,0.3));
+  border-color: rgba(0,201,167,0.5);
+  color: var(--teal);
+}
+.words-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.scramble-actions { display: flex; gap: 8px; margin-top: 10px; }
+.reset-btn {
+  background: transparent;
+  border: 2px solid var(--muted);
+  border-radius: 30px;
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.reset-btn:hover { border-color: var(--text); color: var(--text); }
+.scramble-result {
+  display: none;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.scramble-result.show { display: block; }
+.scramble-result.correct-r { color: var(--teal); }
+.scramble-result.wrong-r { color: #ff7777; }
+
+/* ───── SPEAKING ───── */
+.phrase-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.phrase-text { flex: 1; }
+.phrase-main { font-weight: 800; font-size: 0.95rem; }
+.phrase-type {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+.phrase-type.congrats { color: var(--teal); }
+.phrase-type.sympathy { color: var(--pink); }
+.play-mini {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.play-mini:hover { background: var(--teal); color: var(--bg); }
+
+.dialogue-speech {
+  background: rgba(0,0,0,0.2);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.keyword-highlight {
+  background: var(--yellow);
+  color: var(--bg);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: 800;
+  font-size: 0.88em;
+}
+
+.real-world-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.situation-badge {
+  background: linear-gradient(135deg, var(--purple), rgba(233,30,140,0.5));
+  color: var(--yellow);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.situation-text { font-weight: 600; font-size: 0.9rem; margin-bottom: 14px; line-height: 1.5; }
+
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mc-btn:hover:not(:disabled) { border-color: var(--pink); background: rgba(233,30,140,0.1); }
+.mc-btn.mc-correct { border-color: var(--teal) !important; background: rgba(0,201,167,0.15) !important; color: var(--teal); }
+.mc-btn.mc-wrong { border-color: #ff4444 !important; background: rgba(255,68,68,0.12) !important; color: #ff7777; }
+.mc-btn:disabled { cursor: default; }
+
+/* ───── WORD STRESS ───── */
+.stress-rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.stress-rule-card {
+  background: rgba(0,0,0,0.25);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 4px solid var(--pink);
+}
+.stress-rule-card.second { border-left-color: var(--teal); }
+.stress-rule-title { font-weight: 800; font-size: 0.8rem; color: var(--yellow); margin-bottom: 8px; }
+.stress-example { font-size: 0.85rem; }
+.stressed { color: var(--yellow); font-weight: 800; text-decoration: underline; }
+
+.stress-tap-word {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.stress-word-display {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.syllable-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.syl-btn {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.syl-btn:hover:not(:disabled) { border-color: var(--yellow); color: var(--yellow); }
+.syl-btn.syl-correct { border-color: var(--teal) !important; background: rgba(0,201,167,0.2) !important; color: var(--teal); }
+.syl-btn.syl-wrong { border-color: #ff4444 !important; background: rgba(255,68,68,0.15) !important; color: #ff7777; }
+.syl-btn:disabled { cursor: default; }
+.stress-feedback { margin-top: 10px; font-size: 0.85rem; font-weight: 700; display: none; }
+.stress-feedback.show { display: block; }
+.stress-feedback.sf-correct { color: var(--teal); }
+.stress-feedback.sf-wrong { color: #ff7777; }
+
+/* ───── BOTTOM NAV (mobile) ───── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10,4,30,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-border);
+  padding: 8px 0 12px;
+  z-index: 200;
+}
+.bottom-nav-items {
+  display: flex;
+  justify-content: space-around;
+}
+.bnav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.bnav-btn.active { color: var(--yellow); }
+.bnav-icon { font-size: 1.3rem; }
+
+/* ───── HERO ───── */
+.hero-card {
+  background: linear-gradient(135deg, rgba(233,30,140,0.2), rgba(0,201,167,0.15), rgba(45,27,105,0.4));
+  border: 1px solid rgba(233,30,140,0.25);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content: '🎓';
+  position: absolute;
+  right: 24px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 5rem;
+  opacity: 0.15;
+}
+.hero-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.4rem;
+  color: var(--yellow);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.hero-desc { color: var(--muted); max-width: 480px; line-height: 1.6; }
+.progress-bar-wrap {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 30px;
+  height: 8px;
+  overflow: hidden;
+  max-width: 400px;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--yellow));
+  border-radius: 30px;
+  transition: width 0.5s ease;
+}
+
+/* ───── RESPONSIVE ───── */
+@media (max-width: 767px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .section { padding: 24px 16px 90px; }
+  .bottom-nav { display: block; }
+  .section-title { font-size: 1.6rem; }
+  .vocab-grid { grid-template-columns: 1fr 1fr; }
+  .options-grid { grid-template-columns: 1fr; }
+  .rule-grid { grid-template-columns: 1fr; }
+  .stress-rules-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .vocab-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.toast {
+  position: fixed;
+  top: 20px; right: 20px;
+  background: linear-gradient(135deg, var(--teal), #009b80);
+  color: var(--bg);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  z-index: 999;
+  transform: translateX(200px);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    English Do You Speak<br>
+    <span>@englishdoyouspeak</span>
+    <div><span class="sidebar-badge">🎒 TEENS EDITION</span></div>
+  </div>
+
+  <div class="nav-section">📚 Vocabulary</div>
+  <button class="nav-btn active" onclick="showSection('listen-repeat')">
+    <span class="nav-icon">🔊</span> Listen & Repeat
+  </button>
+  <button class="nav-btn" onclick="showSection('listen-eval')">
+    <span class="nav-icon">🎙️</span> Listen & Be Evaluated
+  </button>
+  <button class="nav-btn" onclick="showSection('listening-challenge')">
+    <span class="nav-icon">🎧</span> Listening Challenge
+  </button>
+
+  <div class="nav-section">📝 Grammar</div>
+  <button class="nav-btn" onclick="showSection('quick-rules')">
+    <span class="nav-icon">⚡</span> Quick Rules
+  </button>
+  <button class="nav-btn" onclick="showSection('dialogue-complete')">
+    <span class="nav-icon">💬</span> Complete the Dialogue
+  </button>
+  <button class="nav-btn" onclick="showSection('scramble')">
+    <span class="nav-icon">🔀</span> Sentence Scramble
+  </button>
+
+  <div class="nav-section">💬 Speaking</div>
+  <button class="nav-btn" onclick="showSection('key-phrases')">
+    <span class="nav-icon">✨</span> Key Phrases
+  </button>
+  <button class="nav-btn" onclick="showSection('dialogues')">
+    <span class="nav-icon">🗣️</span> Dialogues
+  </button>
+  <button class="nav-btn" onclick="showSection('record-response')">
+    <span class="nav-icon">⏺️</span> Record a Response
+  </button>
+  <button class="nav-btn" onclick="showSection('real-world')">
+    <span class="nav-icon">🌍</span> Real-World Strategy
+  </button>
+
+  <div class="nav-section">🔊 Pronunciation</div>
+  <button class="nav-btn" onclick="showSection('stress-rules')">
+    <span class="nav-icon">📏</span> Word Stress Rules
+  </button>
+  <button class="nav-btn" onclick="showSection('tap-stress')">
+    <span class="nav-icon">👆</span> Tap the Stress
+  </button>
+  <button class="nav-btn" onclick="showSection('stress-record')">
+    <span class="nav-icon">🎤</span> Listen & Record
+  </button>
+
+  <div class="points-badge">
+    ⭐ My Points
+    <span class="pts-num" id="sidebar-pts">0</span>
+    stars earned
+  </div>
+</nav>
+
+<!-- ═══════ BOTTOM NAV (mobile) ═══════ -->
+<div class="bottom-nav">
+  <div class="bottom-nav-items">
+    <button class="bnav-btn active" onclick="showSection('listen-repeat')">
+      <span class="bnav-icon">📚</span>Vocab
+    </button>
+    <button class="bnav-btn" onclick="showSection('quick-rules')">
+      <span class="bnav-icon">📝</span>Grammar
+    </button>
+    <button class="bnav-btn" onclick="showSection('key-phrases')">
+      <span class="bnav-icon">💬</span>Speaking
+    </button>
+    <button class="bnav-btn" onclick="showSection('stress-rules')">
+      <span class="bnav-icon">🔊</span>Stress
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<!-- ═══════ MAIN ═══════ -->
+<main class="main">
+
+<!-- ──────────────────────────────────────
+     SECTION 1A: LISTEN & REPEAT
+─────────────────────────────────────── -->
+<section class="section active" id="listen-repeat">
+  <div class="section-header">
+    <div class="section-tag">📚 Vocabulary — Section 1</div>
+    <h1 class="section-title">Listen & Repeat 🔊</h1>
+    <p class="section-desc">Tap any card to hear the word. Repeat it out loud and keep going! These are key life events.</p>
+  </div>
+
+  <div class="hero-card">
+    <div class="hero-label">Lesson 5.2 & 5.3 — Teens Edition</div>
+    <h2 class="hero-title">Life Events 🎯</h2>
+    <p class="hero-desc">Learn 12 important life events. Tap to listen, repeat out loud, and score points as you go!</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="main-progress" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="vocab-grid" id="vocab-grid"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 1B: LISTEN, REPEAT & BE EVALUATED
+─────────────────────────────────────── -->
+<section class="section" id="listen-eval">
+  <div class="section-header">
+    <div class="section-tag">📚 Vocabulary — Section 2</div>
+    <h1 class="section-title">Listen, Repeat & Be Evaluated 🎙️</h1>
+    <p class="section-desc">3 steps: ① Listen first ② Record yourself ③ Get your score. Can you nail all 12?</p>
+  </div>
+  <div id="eval-cards-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 1C: LISTENING CHALLENGE
+─────────────────────────────────────── -->
+<section class="section" id="listening-challenge">
+  <div class="section-header">
+    <div class="section-tag">📚 Vocabulary — Section 3</div>
+    <h1 class="section-title">🎧 Listening Challenge</h1>
+    <p class="section-desc">8 intermediate-level situations. The life event is NEVER said directly — listen for context clues!</p>
+  </div>
+  <div id="challenge-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 2A: QUICK RULES
+─────────────────────────────────────── -->
+<section class="section" id="quick-rules">
+  <div class="section-header">
+    <div class="section-tag">📝 Grammar — Section 1</div>
+    <h1 class="section-title">Quick Rules ⚡</h1>
+    <p class="section-desc">Simple Past — your cheat sheet. Save it, screenshot it, use it!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Affirmative</div>
+    <div class="rule-grid">
+      <div class="grammar-rule-box">
+        <div class="rule-title">Regular verbs</div>
+        <div style="font-size:0.85rem;color:var(--muted)">verb + <strong style="color:var(--yellow)">-ed</strong></div>
+        <div class="rule-example">He <strong>started</strong> a new job.</div>
+        <div class="rule-example">They <strong>moved</strong> to a new city.</div>
+      </div>
+      <div class="grammar-rule-box">
+        <div class="rule-title">Irregular verbs</div>
+        <div style="font-size:0.85rem;color:var(--muted)">special past form</div>
+        <div class="rule-example">She <strong>got</strong> married last year.</div>
+        <div class="rule-example">He <strong>went</strong> abroad to study.</div>
+      </div>
+      <div class="grammar-rule-box">
+        <div class="rule-title">was / were</div>
+        <div style="font-size:0.85rem;color:var(--muted)">I/he/she/it → <strong style="color:var(--yellow)">was</strong></div>
+        <div class="rule-example">She <strong>was</strong> born in São Paulo.</div>
+        <div class="rule-example">We <strong>were</strong> excited about the trip.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">❌ Negative</div>
+    <div class="grammar-rule-box">
+      <div class="rule-title">didn't + base verb</div>
+      <div style="font-size:0.85rem;color:var(--muted);margin-bottom:8px">Did NOT → didn't (all subjects)</div>
+      <div class="rule-example">She <strong>didn't graduate</strong> last year.</div>
+      <div class="rule-example">They <strong>didn't retire</strong> at 60.</div>
+      <div style="margin-top:12px;padding:10px;background:rgba(255,68,68,0.1);border-radius:8px;font-size:0.82rem;color:#ff9999">
+        ⚠️ Never: She <s>didn't graduated</s> | He <s>didn't went</s>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">❓ Questions</div>
+    <div class="rule-grid">
+      <div class="grammar-rule-box">
+        <div class="rule-title">Yes/No questions</div>
+        <div class="rule-example"><strong>Did</strong> she start a new job?</div>
+        <div class="rule-example">→ Yes, she <strong>did</strong>. / No, she <strong>didn't</strong>.</div>
+      </div>
+      <div class="grammar-rule-box">
+        <div class="rule-title">Wh- questions</div>
+        <div class="rule-example"><strong>When</strong> did they get married?</div>
+        <div class="rule-example"><strong>Where</strong> did he grow up?</div>
+      </div>
+      <div class="grammar-rule-box">
+        <div class="rule-title">was / were questions</div>
+        <div class="rule-example"><strong>Was</strong> she born here?</div>
+        <div class="rule-example"><strong>Were</strong> they happy?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 2B: COMPLETE THE DIALOGUE
+─────────────────────────────────────── -->
+<section class="section" id="dialogue-complete">
+  <div class="section-header">
+    <div class="section-tag">📝 Grammar — Section 2</div>
+    <h1 class="section-title">💬 Complete the Dialogue</h1>
+    <p class="section-desc">3 real-life conversations. Fill in the blanks — no hints! Explanation appears after you check.</p>
+  </div>
+  <div id="dialogues-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 2C: SENTENCE SCRAMBLE
+─────────────────────────────────────── -->
+<section class="section" id="scramble">
+  <div class="section-header">
+    <div class="section-tag">📝 Grammar — Section 3</div>
+    <h1 class="section-title">🔀 Sentence Scramble</h1>
+    <p class="section-desc">Click the words in the correct order to build the sentence. Click a word again to remove it.</p>
+  </div>
+  <div id="scramble-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 3A: KEY PHRASES
+─────────────────────────────────────── -->
+<section class="section" id="key-phrases">
+  <div class="section-header">
+    <div class="section-tag">💬 Speaking — Section 1</div>
+    <h1 class="section-title">✨ Key Phrases</h1>
+    <p class="section-desc">Congratulations & Sympathy — what to say when something big happens. Tap to listen!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎉 Congratulations</div>
+    <div id="congrats-phrases"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🤍 Sympathy</div>
+    <div id="sympathy-phrases"></div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 3B: DIALOGUES
+─────────────────────────────────────── -->
+<section class="section" id="dialogues">
+  <div class="section-header">
+    <div class="section-tag">💬 Speaking — Section 2</div>
+    <h1 class="section-title">🗣️ Dialogues</h1>
+    <p class="section-desc">2 real conversations. Pay attention to the keywords highlighted in yellow!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💬 Dialogue 1 — School Friends</div>
+    <div class="dialogue-speech">
+      <div class="dialogue-title">📍 Scene: Two friends chatting after class</div>
+      <div class="dialogue-line">
+        <span class="speaker">Leo:</span>
+        <span class="dialogue-text">Hey! <span class="keyword-highlight">Did you hear</span>? Maya just <span class="keyword-highlight">got into</span> that art school she applied for.</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Sofia:</span>
+        <span class="dialogue-text"><span class="keyword-highlight">Oh wow, that's amazing!</span> She <span class="keyword-highlight">worked so hard</span> for it. When did she find out?</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Leo:</span>
+        <span class="dialogue-text">Yesterday. She <span class="keyword-highlight">got the email</span> right after our history test. She was <span class="keyword-highlight">over the moon.</span></span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Sofia:</span>
+        <span class="dialogue-text"><span class="keyword-highlight">I can imagine!</span> We should <span class="keyword-highlight">celebrate</span> with her. Are you going to her place?</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Leo:</span>
+        <span class="dialogue-text">Definitely. And her older brother <span class="keyword-highlight">just graduated</span> from university too. It's a big week for their family!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💬 Dialogue 2 — Family News</div>
+    <div class="dialogue-speech">
+      <div class="dialogue-title">📍 Scene: Two teens talking about family updates</div>
+      <div class="dialogue-line">
+        <span class="speaker">Bianca:</span>
+        <span class="dialogue-text">You look kind of <span class="keyword-highlight">down today</span>. Is everything okay?</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Pedro:</span>
+        <span class="dialogue-text">Not really. My uncle <span class="keyword-highlight">lost his job</span> last month. He's been trying to find a new one.</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Bianca:</span>
+        <span class="dialogue-text"><span class="keyword-highlight">Oh, I'm sorry to hear that.</span> That must be <span class="keyword-highlight">stressful</span> for the whole family.</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Pedro:</span>
+        <span class="dialogue-text">Yeah. But on the bright side, my parents <span class="keyword-highlight">just bought</span> a new house! We're moving next month.</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Bianca:</span>
+        <span class="dialogue-text"><span class="keyword-highlight">That's great news!</span> Are you <span class="keyword-highlight">excited</span>? Will it be far from school?</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker">Pedro:</span>
+        <span class="dialogue-text">It's a bit far, but it's okay. <span class="keyword-highlight">It is what it is.</span> At least the new place has a garden!</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 3C: RECORD A RESPONSE
+─────────────────────────────────────── -->
+<section class="section" id="record-response">
+  <div class="section-header">
+    <div class="section-tag">💬 Speaking — Section 3</div>
+    <h1 class="section-title">⏺️ Record a Response</h1>
+    <p class="section-desc">4 real situations. Speak your response, then get evaluated!</p>
+  </div>
+  <div id="response-record-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 3D: REAL-WORLD STRATEGY
+─────────────────────────────────────── -->
+<section class="section" id="real-world">
+  <div class="section-header">
+    <div class="section-tag">💬 Speaking — Section 4</div>
+    <h1 class="section-title">🌍 Real-World Strategy</h1>
+    <p class="section-desc">Checking Understanding — 4 multiple-choice questions based on real situations.</p>
+  </div>
+  <div id="real-world-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 4A: STRESS RULES
+─────────────────────────────────────── -->
+<section class="section" id="stress-rules">
+  <div class="section-header">
+    <div class="section-tag">🔊 Pronunciation — Section 1</div>
+    <h1 class="section-title">📏 Word Stress Rules</h1>
+    <p class="section-desc">Where's the stress? Two main patterns to know!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 Main Patterns</div>
+    <div class="stress-rules-grid">
+      <div class="stress-rule-card">
+        <div class="stress-rule-title">🔴 1st Syllable Stress</div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px">Common in nouns and adjectives</p>
+        <div class="stress-example"><span class="stressed">MA</span>-rried</div>
+        <div class="stress-example"><span class="stressed">MO</span>-ved</div>
+        <div class="stress-example"><span class="stressed">RET</span>-ired</div>
+      </div>
+      <div class="stress-rule-card second">
+        <div class="stress-rule-title">🔵 2nd Syllable Stress</div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px">Common in verbs and longer words</p>
+        <div class="stress-example">a-<span class="stressed" style="color:var(--teal)">BROAD</span></div>
+        <div class="stress-example">be-<span class="stressed" style="color:var(--teal)">GAN</span></div>
+        <div class="stress-example">re-<span class="stressed" style="color:var(--teal)">TIRE</span></div>
+      </div>
+    </div>
+    <div style="background:rgba(255,214,0,0.08);border-radius:12px;padding:14px;margin-top:4px;border:1px solid rgba(255,214,0,0.2)">
+      <div style="font-weight:800;color:var(--yellow);margin-bottom:8px;font-size:0.85rem">💡 Pro Tip for Teens</div>
+      <p style="font-size:0.83rem;color:var(--muted);line-height:1.6">Imagine the stressed syllable is being said with a <strong style="color:var(--text)">louder, longer, and higher pitch</strong>. Think of it like the most important beat in a song. 🎵</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 4B: TAP THE STRESS
+─────────────────────────────────────── -->
+<section class="section" id="tap-stress">
+  <div class="section-header">
+    <div class="section-tag">🔊 Pronunciation — Section 2</div>
+    <h1 class="section-title">👆 Tap the Stress</h1>
+    <p class="section-desc">7 words. Tap the syllable with the main stress. Immediate feedback!</p>
+  </div>
+  <div id="tap-stress-container"></div>
+</section>
+
+<!-- ──────────────────────────────────────
+     SECTION 4C: STRESS LISTEN & RECORD
+─────────────────────────────────────── -->
+<section class="section" id="stress-record">
+  <div class="section-header">
+    <div class="section-tag">🔊 Pronunciation — Section 3</div>
+    <h1 class="section-title">🎤 Listen & Record</h1>
+    <p class="section-desc">Listen to each word, then record yourself. Focus on the stressed syllable!</p>
+  </div>
+  <div id="stress-record-container"></div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const VOCAB = [
+  { word: "get married",    emoji: "💍", phonetic: "/ɡet ˈmærid/" },
+  { word: "have a baby",    emoji: "👶", phonetic: "/hæv ə ˈbeɪbi/" },
+  { word: "start a job",    emoji: "💼", phonetic: "/stɑːrt ə dʒɒb/" },
+  { word: "retire",         emoji: "🏖️", phonetic: "/rɪˈtaɪər/" },
+  { word: "graduate",       emoji: "🎓", phonetic: "/ˈɡrætʃueɪt/" },
+  { word: "move house",     emoji: "📦", phonetic: "/muːv haʊs/" },
+  { word: "go abroad",      emoji: "✈️", phonetic: "/ɡəʊ əˈbrɔːd/" },
+  { word: "lose a job",     emoji: "😟", phonetic: "/luːz ə dʒɒb/" },
+  { word: "pass an exam",   emoji: "📝", phonetic: "/pɑːs ən ɪɡˈzæm/" },
+  { word: "buy a house",    emoji: "🏡", phonetic: "/baɪ ə haʊs/" },
+  { word: "start a family", emoji: "👨‍👩‍👧", phonetic: "/stɑːrt ə ˈfæmɪli/" },
+  { word: "grow up",        emoji: "🌱", phonetic: "/ɡrəʊ ʌp/" },
+];
+
+const LISTENING_CHALLENGES = [
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "Everyone clapped when she walked off the stage. She looked so proud holding that diploma. Her parents were crying happy tears in the front row.",
+    options: [
+      { emoji: "🎓", text: "graduate" },
+      { emoji: "💼", text: "start a job" },
+      { emoji: "🏖️", text: "retire" },
+      { emoji: "💍", text: "get married" },
+    ],
+    correct: 0,
+    feedback: "She walked off stage with a diploma — that's graduation! ✅",
+    contextClue: "Context clues: <strong>diploma</strong>, <strong>stage</strong>, <strong>proud</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "He packed up his office, said goodbye to his colleagues, and handed in his badge. No more Monday meetings for him — just beach days ahead!",
+    options: [
+      { emoji: "📦", text: "move house" },
+      { emoji: "🏖️", text: "retire" },
+      { emoji: "😟", text: "lose a job" },
+      { emoji: "✈️", text: "go abroad" },
+    ],
+    correct: 1,
+    feedback: "Packed up the office + no more Mondays = retirement! ✅",
+    contextClue: "Context clues: <strong>said goodbye to colleagues</strong>, <strong>beach days</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "She got her IELTS score back and jumped up and cheering. She'd been studying for months. Now she could apply to the university overseas.",
+    options: [
+      { emoji: "🎓", text: "graduate" },
+      { emoji: "✈️", text: "go abroad" },
+      { emoji: "📝", text: "pass an exam" },
+      { emoji: "💼", text: "start a job" },
+    ],
+    correct: 2,
+    feedback: "IELTS score + jumping for joy = passing an exam! ✅",
+    contextClue: "Context clues: <strong>IELTS score</strong>, <strong>studying for months</strong>, <strong>cheering</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "The boxes were everywhere. The movers carried the sofa through the front door. It was smaller than the old place, but it was theirs.",
+    options: [
+      { emoji: "🏡", text: "buy a house" },
+      { emoji: "📦", text: "move house" },
+      { emoji: "👨‍👩‍👧", text: "start a family" },
+      { emoji: "🌱", text: "grow up" },
+    ],
+    correct: 1,
+    feedback: "Boxes + movers + new front door = moving house! ✅",
+    contextClue: "Context clues: <strong>boxes everywhere</strong>, <strong>movers</strong>, <strong>front door</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "The company closed down suddenly and everyone had to leave. He cleaned out his desk in silence. He didn't even get a goodbye party.",
+    options: [
+      { emoji: "🏖️", text: "retire" },
+      { emoji: "📦", text: "move house" },
+      { emoji: "😟", text: "lose a job" },
+      { emoji: "💼", text: "start a job" },
+    ],
+    correct: 2,
+    feedback: "Company closed + had to leave = losing a job! ✅",
+    contextClue: "Context clues: <strong>company closed</strong>, <strong>everyone left</strong>, <strong>cleaned out his desk</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "Their suitcases were already at the door. They'd got their visas approved and bought their one-way tickets. A new life in another country was waiting.",
+    options: [
+      { emoji: "✈️", text: "go abroad" },
+      { emoji: "🏡", text: "buy a house" },
+      { emoji: "💍", text: "get married" },
+      { emoji: "📝", text: "pass an exam" },
+    ],
+    correct: 0,
+    feedback: "Visa + one-way ticket + another country = going abroad! ✅",
+    contextClue: "Context clues: <strong>visas</strong>, <strong>one-way tickets</strong>, <strong>another country</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "There was a tiny crib in the corner of the room. The parents hadn't slept properly in weeks. But every time they looked at that little face, they smiled.",
+    options: [
+      { emoji: "👨‍👩‍👧", text: "start a family" },
+      { emoji: "👶", text: "have a baby" },
+      { emoji: "💍", text: "get married" },
+      { emoji: "🌱", text: "grow up" },
+    ],
+    correct: 1,
+    feedback: "Crib + no sleep + tiny face = having a baby! ✅",
+    contextClue: "Context clues: <strong>crib</strong>, <strong>hadn't slept</strong>, <strong>little face</strong>",
+  },
+  {
+    prompt: "Listen to the situation and choose the correct life event:",
+    audio: "He signed the contract on his first day. He was nervous, but excited. The commute was long, but the salary was good.",
+    options: [
+      { emoji: "🎓", text: "graduate" },
+      { emoji: "💼", text: "start a job" },
+      { emoji: "🏖️", text: "retire" },
+      { emoji: "📦", text: "move house" },
+    ],
+    correct: 1,
+    feedback: "First day + contract + salary = starting a job! ✅",
+    contextClue: "Context clues: <strong>signed contract</strong>, <strong>first day</strong>, <strong>salary</strong>",
+  },
+];
+
+const GRAMMAR_DIALOGUES = [
+  {
+    title: "😅 Dialogue 1 — Study Stress",
+    scene: "Two classmates talking about yesterday's exam",
+    lines: [
+      { speaker: "Ryan", text: "Hey, [___] you [___] the biology test yesterday?", blanks: [{pos:0, answer:"did", hint:"auxiliary"}, {pos:1, answer:"pass", hint:"base form!"}] },
+      { speaker: "Clara", text: "Barely! I [___] studying until midnight.", blanks: [{pos:0, answer:"was", hint:"past of 'be'"}] },
+      { speaker: "Ryan", text: "[___] your sister [___] you with the notes?", blanks: [{pos:0, answer:"did", hint:"auxiliary"}, {pos:1, answer:"help", hint:"base form!"}] },
+      { speaker: "Clara", text: "She [___], actually. She [___] late too.", blanks: [{pos:0, answer:"didn't", hint:"neg. auxiliary"}, {pos:1, answer:"worked", hint:"regular verb + -ed"}] },
+    ],
+    explanation: "💡 In questions: Did + subject + BASE FORM. In negatives: didn't + BASE FORM. 'Was' is the past of 'be' (am/is). 'Didn't' = did not — never use -ed after it!",
+  },
+  {
+    title: "🏡 Dialogue 2 — Big Family News",
+    scene: "Two friends talking at lunch break",
+    lines: [
+      { speaker: "Nina", text: "My family [___] to a new city last month.", blanks: [{pos:0, answer:"moved", hint:"moved (-ed)"}] },
+      { speaker: "Jake", text: "Seriously? [___] you [___] it?", blanks: [{pos:0, answer:"did", hint:"auxiliary"}, {pos:1, answer:"choose", hint:"base form!"}] },
+      { speaker: "Nina", text: "My parents [___] it. They [___] a better school for me.", blanks: [{pos:0, answer:"decided", hint:"decided (-ed)"}, {pos:1, answer:"wanted", hint:"wanted (-ed)"}] },
+      { speaker: "Jake", text: "[___] you [___] sad to leave your old friends?", blanks: [{pos:0, answer:"were", hint:"past of 'be'"}, {pos:1, answer:""}] },
+    ],
+    explanation: "💡 Regular verbs add -ed in the past (moved, decided, wanted). Questions with 'be': Were you...? Was she...? — no 'did' needed! Questions with other verbs: Did + base form.",
+  },
+  {
+    title: "🎓 Dialogue 3 — Future Plans",
+    scene: "Two teenagers after their graduation ceremony",
+    lines: [
+      { speaker: "Lucas", text: "I can't believe we finally [___]!", blanks: [{pos:0, answer:"graduated", hint:"graduated (-ed)"}] },
+      { speaker: "Ana", text: "I know! [___] you [___] your university letter yet?", blanks: [{pos:0, answer:"did", hint:"auxiliary"}, {pos:1, answer:"receive", hint:"base form!"}] },
+      { speaker: "Lucas", text: "Yes! I [___] in last Tuesday.", blanks: [{pos:0, answer:"got", hint:"irregular! get → got"}] },
+      { speaker: "Ana", text: "Amazing! [___] your parents [___] when you told them?", blanks: [{pos:0, answer:"were", hint:"past of 'be'"}, {pos:1, answer:""}] },
+      { speaker: "Lucas", text: "My mum [___] happy. My dad [___] cry — literally!", blanks: [{pos:0, answer:"was", hint:"was (singular)"}, {pos:1, answer:"started", hint:"started (-ed)"}] },
+    ],
+    explanation: "💡 Irregular verb: GET → GOT (not 'getted'!). 'Were' is the past of 'are' (plural). Check: graduated ✓ received ✓ got ✓ was ✓ started ✓",
+  },
+];
+
+const SCRAMBLE_SENTENCES = [
+  {
+    context: "📱 Social media post about a big moment",
+    words: ["She", "started", "her", "new", "job", "last", "Monday"],
+    answer: "She started her new job last Monday",
+  },
+  {
+    context: "👨‍👩‍👧 Family conversation",
+    words: ["Did", "your", "parents", "buy", "a", "house", "last", "year", "?"],
+    answer: "Did your parents buy a house last year?",
+  },
+  {
+    context: "😟 Conversation about tough news",
+    words: ["He", "didn't", "pass", "the", "exam", "the", "first", "time"],
+    answer: "He didn't pass the exam the first time",
+  },
+  {
+    context: "🎓 Talking about a friend's achievement",
+    words: ["When", "did", "she", "graduate", "from", "university", "?"],
+    answer: "When did she graduate from university?",
+  },
+  {
+    context: "✈️ Sharing exciting news",
+    words: ["My", "older", "brother", "went", "abroad", "after", "he", "graduated"],
+    answer: "My older brother went abroad after he graduated",
+  },
+];
+
+const KEY_PHRASES = {
+  congrats: [
+    "That's amazing news!",
+    "I'm so happy for you!",
+    "Congratulations! You deserve it!",
+    "That's fantastic! Well done!",
+    "Oh wow, I'm so proud of you!",
+  ],
+  sympathy: [
+    "I'm really sorry to hear that.",
+    "That must be so hard for you.",
+    "I can imagine how you feel.",
+    "If you need anything, I'm here.",
+    "Hang in there — things will get better.",
+  ],
+};
+
+const RESPONSE_SITUATIONS = [
+  {
+    badge: "At school",
+    text: 'Your friend says: "I finally passed my driving test! I failed twice before!" — What do you say?',
+    prompt: "Respond with congratulations and one follow-up question.",
+  },
+  {
+    badge: "Group chat",
+    text: 'Someone posts: "My dog died yesterday 😢 I had him since I was 7." — What do you reply?',
+    prompt: "Show sympathy and say something comforting.",
+  },
+  {
+    badge: "At home",
+    text: "Your parent says: \"I might have to change jobs. The company isn't doing well.\" — How do you respond?",
+    prompt: "Show understanding and offer support.",
+  },
+  {
+    badge: "With friends",
+    text: 'Your friend says: "My sister just had her baby! I\'m an uncle/aunt now!" — What\'s your reaction?',
+    prompt: "Congratulate and ask one follow-up question.",
+  },
+];
+
+const REAL_WORLD_QUESTIONS = [
+  {
+    situation: "Your new English classmate tells you something and you didn't quite understand. What's the best way to check?",
+    options: [
+      "Say nothing and pretend you understood",
+      "Ask: \"Sorry, could you say that again more slowly?\"",
+      "Change the subject immediately",
+      "Just reply \"OK\" and walk away",
+    ],
+    correct: 1,
+    explanation: "Asking someone to repeat themselves slowly is polite and natural in English. Native speakers do it all the time! ✅",
+  },
+  {
+    situation: "A friend shares exciting news but you want to make sure you understood correctly. What do you say?",
+    options: [
+      "\"Wait — so you're saying you got into the program?\"",
+      "\"Whatever, that's cool I guess.\"",
+      "\"Are you serious? That can't be true.\"",
+      "\"I have no idea what you're talking about.\"",
+    ],
+    correct: 0,
+    explanation: "Paraphrasing back ('So you're saying...') shows you're engaged and confirms your understanding. Great strategy! ✅",
+  },
+  {
+    situation: "You heard someone say \"I passed my exam\" but you're not sure if they mean they DID or DIDN'T pass. What's best?",
+    options: [
+      "Congratulate them anyway and hope for the best",
+      "Ask: \"Oh nice — so you passed or failed?\"",
+      "Ask: \"Wait, did you say you passed?\"",
+      "Ignore it — it's not important",
+    ],
+    correct: 2,
+    explanation: "Clarifying by repeating the key word ('did you say you PASSED?') is a smart and natural checking strategy. ✅",
+  },
+  {
+    situation: "Someone tells you a long story about a life event. You want to show you're following. What's the BEST response mid-story?",
+    options: [
+      "Nod and say \"Mm-hmm\" or \"Really?\"",
+      "Check your phone while they talk",
+      "Interrupt and finish their sentence",
+      "Look confused and say \"I don't get it\"",
+    ],
+    correct: 0,
+    explanation: "Short back-channel responses like 'Really?' 'Wow!' or 'Mm-hmm' show you're actively listening. Essential in real conversations! ✅",
+  },
+];
+
+const TAP_STRESS = [
+  { word: "GRA·du·ate",   syllables: ["GRA","du","ate"], correct: 0 },
+  { word: "re·TIRE",      syllables: ["re","TIRE"],      correct: 1 },
+  { word: "mar·ried",     syllables: ["mar","ried"],     correct: 0 },
+  { word: "a·BROAD",      syllables: ["a","BROAD"],      correct: 1 },
+  { word: "MO·ved",       syllables: ["MO","ved"],       correct: 0 },
+  { word: "de·CI·ded",    syllables: ["de","CI","ded"],  correct: 1 },
+  { word: "STAR·ted",     syllables: ["STAR","ted"],     correct: 0 },
+];
+
+const STRESS_RECORD_WORDS = [
+  { word: "graduate",    stress: "GRA-du-ate",   emoji: "🎓" },
+  { word: "retire",      stress: "re-TIRE",      emoji: "🏖️" },
+  { word: "decided",     stress: "de-CI-ded",    emoji: "🤔" },
+  { word: "married",     stress: "MAR-ried",     emoji: "💍" },
+  { word: "abroad",      stress: "a-BROAD",      emoji: "✈️" },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let points = 0;
+let recognition = null;
+let currentRecordBtn = null;
+let mediaRecorder = null;
+
+// ─── UTILITIES ───────────────────────────────────────────────────────────────
+function speak(text, onEnd) {
+  // ResponsiveVoice — voz feminina americana, natural e clara
+  if (typeof responsiveVoice !== 'undefined') {
+    responsiveVoice.speak(text, 'US English Female', {
+      rate: 0.9,    // ligeiramente mais devagar — melhor para aprendizado
+      pitch: 1,
+      volume: 1,
+      onend: onEnd || undefined,
+    });
+  } else {
+    // Fallback nativo caso o CDN não carregue
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.88;
+    if (onEnd) u.onend = onEnd;
+    synth.speak(u);
+  }
+}
+
+function addPoints(n) {
+  points += n;
+  document.getElementById('sidebar-pts').textContent = points;
+  showToast(`+${n} ⭐`);
+  const pct = Math.min(100, (points / 50) * 100);
+  document.getElementById('main-progress').style.width = pct + '%';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) {
+      b.classList.add('active');
+    }
+  });
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+}
+
+function startSpeechRecognition(btn, word, onResult) {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    btn.textContent = '⚠️ Not supported';
+    return;
+  }
+  if (recognition) { recognition.stop(); recognition = null; }
+  recognition = new SpeechRec();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+  btn.classList.add('recording');
+  btn.textContent = '🔴 Recording...';
+  recognition.start();
+  recognition.onresult = (e) => {
+    const results = Array.from(e.results[0]).map(r => r.transcript.toLowerCase());
+    onResult(results, word);
+    btn.classList.remove('recording');
+    btn.textContent = '🎙️ Record';
+  };
+  recognition.onerror = () => {
+    btn.classList.remove('recording');
+    btn.textContent = '🎙️ Record';
+  };
+  recognition.onend = () => {
+    btn.classList.remove('recording');
+    if (btn.textContent === '🔴 Recording...') btn.textContent = '🎙️ Record';
+  };
+}
+
+function scoreMatch(heard, target) {
+  const t = target.toLowerCase();
+  const words = t.split(' ');
+  const matched = words.filter(w => heard.some(h => h.includes(w)));
+  return Math.round((matched.length / words.length) * 100);
+}
+
+// ─── BUILD VOCAB GRID ────────────────────────────────────────────────────────
+function buildVocabGrid() {
+  const grid = document.getElementById('vocab-grid');
+  VOCAB.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'vocab-card';
+    card.innerHTML = `
+      <span class="audio-icon">🔊</span>
+      <span class="vocab-emoji">${v.emoji}</span>
+      <span class="vocab-word">${v.word}</span>
+      <span class="vocab-sound">${v.phonetic}</span>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.add('playing');
+      speak(v.word, () => {
+        card.classList.remove('playing');
+        addPoints(1);
+      });
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ─── BUILD EVAL CARDS ────────────────────────────────────────────────────────
+function buildEvalCards() {
+  const container = document.getElementById('eval-cards-container');
+  VOCAB.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'record-card';
+    card.innerHTML = `
+      <div class="record-word">${v.emoji} ${v.word}</div>
+      <div style="font-size:0.8rem;color:var(--muted)">${v.phonetic}</div>
+      <div class="record-steps">
+        <button class="step-btn listen" data-idx="${i}">🔊 Listen</button>
+        <button class="step-btn record" data-idx="${i}" disabled>🎙️ Record</button>
+        <button class="step-btn score" data-idx="${i}" disabled>⭐ Score</button>
+        <span class="score-display" id="score-${i}"></span>
+      </div>
+    `;
+    const listenBtn = card.querySelector('.step-btn.listen');
+    const recordBtn = card.querySelector('.step-btn.record');
+    const scoreBtn = card.querySelector('.step-btn.score');
+    const scoreDisplay = card.querySelector('.score-display');
+    let heard = [];
+
+    listenBtn.addEventListener('click', () => {
+      speak(v.word, () => { recordBtn.disabled = false; });
+    });
+
+    recordBtn.addEventListener('click', () => {
+      startSpeechRecognition(recordBtn, v.word, (results) => {
+        heard = results;
+        scoreBtn.disabled = false;
+      });
+    });
+
+    scoreBtn.addEventListener('click', () => {
+      const sc = scoreMatch(heard, v.word);
+      let emoji = sc >= 80 ? '🌟' : sc >= 50 ? '👍' : '💪';
+      scoreDisplay.textContent = `${emoji} ${sc}%`;
+      if (sc >= 60) addPoints(2);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+// ─── BUILD LISTENING CHALLENGE ───────────────────────────────────────────────
+function buildListeningChallenge() {
+  const container = document.getElementById('challenge-container');
+  LISTENING_CHALLENGES.forEach((ch, i) => {
+    const div = document.createElement('div');
+    div.className = 'challenge-card';
+    div.innerHTML = `
+      <div class="challenge-num">Situation ${i + 1} of ${LISTENING_CHALLENGES.length}</div>
+      <div class="challenge-prompt">${ch.prompt}</div>
+      <button class="play-audio-btn" id="play-ch-${i}">🎧 Play audio</button>
+      <div class="options-grid" id="opts-${i}"></div>
+      <div class="challenge-feedback" id="fb-${i}"></div>
+    `;
+    const playBtn = div.querySelector(`#play-ch-${i}`);
+    playBtn.addEventListener('click', () => {
+      playBtn.classList.add('played');
+      playBtn.textContent = '🎧 Playing...';
+      speak(ch.audio, () => { playBtn.textContent = '🎧 Replay'; });
+    });
+
+    const optsDiv = div.querySelector(`#opts-${i}`);
+    ch.options.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerHTML = `<span class="option-emoji">${opt.emoji}</span>${opt.text}`;
+      btn.addEventListener('click', () => {
+        const fb = div.querySelector(`#fb-${i}`);
+        optsDiv.querySelectorAll('.option-btn').forEach(b => { b.disabled = true; });
+        if (oi === ch.correct) {
+          btn.classList.add('correct');
+          fb.innerHTML = `✅ ${ch.feedback}<div class="context-clue">🔍 ${ch.contextClue}</div>`;
+          fb.classList.add('show');
+          addPoints(3);
+        } else {
+          btn.classList.add('wrong');
+          optsDiv.querySelectorAll('.option-btn')[ch.correct].classList.add('correct');
+          fb.innerHTML = `❌ Not quite. The correct answer is <strong>${ch.options[ch.correct].text}</strong>.<div class="context-clue">🔍 ${ch.contextClue}</div>`;
+          fb.classList.add('show', 'feedback-wrong');
+        }
+      });
+      optsDiv.appendChild(btn);
+    });
+
+    container.appendChild(div);
+  });
+}
+
+// ─── BUILD GRAMMAR DIALOGUES ─────────────────────────────────────────────────
+function buildGrammarDialogues() {
+  const container = document.getElementById('dialogues-container');
+  GRAMMAR_DIALOGUES.forEach((dlg, di) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    let linesHTML = dlg.lines.map((line, li) => {
+      let txt = line.text;
+      // Replace [___] with numbered inputs
+      let bIdx = 0;
+      txt = txt.replace(/\[___\]/g, (m) => {
+        const id = `inp-${di}-${li}-${bIdx}`;
+        bIdx++;
+        return `<input class="blank-input" id="${id}" type="text" autocomplete="off" spellcheck="false" placeholder="___">`;
+      });
+      return `<div class="dialogue-line"><span class="speaker">${line.speaker}:</span><span class="dialogue-text">${txt}</span></div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="card-title">${dlg.title}</div>
+      <div class="dialogue-container">
+        <div class="dialogue-title">📍 Scene: ${dlg.scene}</div>
+        ${linesHTML}
+      </div>
+      <button class="verify-btn" id="verify-${di}">✅ Check Answers</button>
+      <div class="explanation-box" id="expl-${di}">${dlg.explanation}</div>
+    `;
+
+    const verifyBtn = card.querySelector(`#verify-${di}`);
+    verifyBtn.addEventListener('click', () => {
+      let allCorrect = true;
+      dlg.lines.forEach((line, li) => {
+        line.blanks.forEach((blank, bi) => {
+          if (!blank.answer) return;
+          const inp = card.querySelector(`#inp-${di}-${li}-${bi}`);
+          if (!inp) return;
+          const val = inp.value.trim().toLowerCase();
+          if (val === blank.answer.toLowerCase()) {
+            inp.classList.add('correct');
+            inp.classList.remove('wrong');
+          } else {
+            inp.classList.add('wrong');
+            inp.classList.remove('correct');
+            allCorrect = false;
+          }
+        });
+      });
+      card.querySelector(`#expl-${di}`).classList.add('show');
+      if (allCorrect) addPoints(4);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+// ─── BUILD SCRAMBLE ──────────────────────────────────────────────────────────
+function buildScramble() {
+  const container = document.getElementById('scramble-container');
+  SCRAMBLE_SENTENCES.forEach((s, si) => {
+    const shuffled = [...s.words].sort(() => Math.random() - 0.5);
+    let chosen = [];
+
+    const div = document.createElement('div');
+    div.className = 'scramble-container';
+    div.innerHTML = `
+      <div class="scramble-context">${s.context}</div>
+      <div class="answer-zone" id="az-${si}"></div>
+      <div class="words-pool" id="pool-${si}"></div>
+      <div class="scramble-actions">
+        <button class="verify-btn" onclick="checkScramble(${si})">✅ Check</button>
+        <button class="reset-btn" onclick="resetScramble(${si})">🔄 Reset</button>
+      </div>
+      <div class="scramble-result" id="sr-${si}"></div>
+    `;
+
+    container.appendChild(div);
+
+    // Store data on div for reset
+    div.dataset.answer = s.answer;
+    div.dataset.si = si;
+
+    const pool = div.querySelector(`#pool-${si}`);
+    const az = div.querySelector(`#az-${si}`);
+
+    function renderPool() {
+      pool.innerHTML = '';
+      shuffled.forEach((w, wi) => {
+        if (chosen.includes(wi)) return;
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.textContent = w;
+        chip.addEventListener('click', () => {
+          chosen.push(wi);
+          renderPool();
+          renderAnswer();
+        });
+        pool.appendChild(chip);
+      });
+    }
+
+    function renderAnswer() {
+      az.innerHTML = '';
+      chosen.forEach((wi, ci) => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip in-answer';
+        chip.textContent = shuffled[wi];
+        chip.addEventListener('click', () => {
+          chosen.splice(ci, 1);
+          renderPool();
+          renderAnswer();
+        });
+        az.appendChild(chip);
+      });
+    }
+
+    window[`checkScramble`] = window[`checkScramble`] || function(){};
+    window[`resetScramble`] = window[`resetScramble`] || function(){};
+
+    renderPool();
+
+    // Store render fns for global access
+    div._chosen = chosen;
+    div._shuffled = shuffled;
+    div._renderPool = renderPool;
+    div._renderAnswer = renderAnswer;
+  });
+
+  window.checkScramble = function(si) {
+    const div = document.querySelector(`.scramble-container[data-si="${si}"]`);
+    const chosen = div._chosen;
+    const shuffled = div._shuffled;
+    const built = chosen.map(i => shuffled[i]).join(' ');
+    const answer = div.dataset.answer;
+    const result = div.querySelector(`#sr-${si}`);
+    if (built.toLowerCase().replace(/[?!.]/g,'') === answer.toLowerCase().replace(/[?!.]/g,'')) {
+      result.textContent = '✅ Correct! Great job!';
+      result.className = 'scramble-result show correct-r';
+      addPoints(3);
+    } else {
+      result.innerHTML = `❌ Not quite. Correct: <strong style="color:var(--yellow)">${answer}</strong>`;
+      result.className = 'scramble-result show wrong-r';
+    }
+  };
+
+  window.resetScramble = function(si) {
+    const div = document.querySelector(`.scramble-container[data-si="${si}"]`);
+    div._chosen.length = 0;
+    div._renderPool();
+    div._renderAnswer();
+    const result = div.querySelector(`#sr-${si}`);
+    result.className = 'scramble-result';
+  };
+}
+
+// ─── BUILD KEY PHRASES ───────────────────────────────────────────────────────
+function buildKeyPhrases() {
+  function renderPhrases(phrases, type, containerId) {
+    const c = document.getElementById(containerId);
+    phrases.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'phrase-card';
+      div.innerHTML = `
+        <div class="phrase-text">
+          <div class="phrase-main">${p}</div>
+          <div class="phrase-type ${type}">${type === 'congrats' ? '🎉 Congratulations' : '🤍 Sympathy'}</div>
+        </div>
+        <div class="play-mini" title="Listen">🔊</div>
+      `;
+      div.querySelector('.play-mini').addEventListener('click', () => speak(p));
+      c.appendChild(div);
+    });
+  }
+  renderPhrases(KEY_PHRASES.congrats, 'congrats', 'congrats-phrases');
+  renderPhrases(KEY_PHRASES.sympathy, 'sympathy', 'sympathy-phrases');
+}
+
+// ─── BUILD RECORD A RESPONSE ─────────────────────────────────────────────────
+function buildRecordResponse() {
+  const c = document.getElementById('response-record-container');
+  RESPONSE_SITUATIONS.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'real-world-card';
+    div.innerHTML = `
+      <div class="situation-badge">${s.badge}</div>
+      <div class="situation-text">${s.text}</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;font-style:italic">💡 ${s.prompt}</div>
+      <div class="record-steps">
+        <button class="step-btn record" id="resp-rec-${i}">🎙️ Record Response</button>
+        <button class="step-btn score" id="resp-sc-${i}" disabled>⭐ Get Score</button>
+        <span class="score-display" id="resp-score-${i}"></span>
+      </div>
+    `;
+    const recBtn = div.querySelector(`#resp-rec-${i}`);
+    const scBtn = div.querySelector(`#resp-sc-${i}`);
+    const scDisplay = div.querySelector(`#resp-score-${i}`);
+    let heardResp = [];
+
+    recBtn.addEventListener('click', () => {
+      startSpeechRecognition(recBtn, 'response', (results) => {
+        heardResp = results;
+        scBtn.disabled = false;
+      });
+    });
+
+    scBtn.addEventListener('click', () => {
+      const len = heardResp[0] ? heardResp[0].split(' ').length : 0;
+      const sc = len >= 6 ? '🌟 Great response!' : len >= 3 ? '👍 Good try! Add more!' : '💪 Try again with more!';
+      scDisplay.textContent = sc;
+      if (len >= 5) addPoints(3);
+    });
+
+    c.appendChild(div);
+  });
+}
+
+// ─── BUILD REAL WORLD ────────────────────────────────────────────────────────
+function buildRealWorld() {
+  const c = document.getElementById('real-world-container');
+  REAL_WORLD_QUESTIONS.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'real-world-card';
+    div.innerHTML = `
+      <div class="situation-badge">Situation ${i + 1}</div>
+      <div class="situation-text">${q.situation}</div>
+      <div class="mc-options" id="mc-${i}"></div>
+      <div class="explanation-box" id="mc-expl-${i}">${q.explanation}</div>
+    `;
+    const mc = div.querySelector(`#mc-${i}`);
+    q.options.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'mc-btn';
+      btn.textContent = `${String.fromCharCode(65+oi)}. ${opt}`;
+      btn.addEventListener('click', () => {
+        mc.querySelectorAll('.mc-btn').forEach(b => b.disabled = true);
+        if (oi === q.correct) {
+          btn.classList.add('mc-correct');
+          addPoints(3);
+        } else {
+          btn.classList.add('mc-wrong');
+          mc.querySelectorAll('.mc-btn')[q.correct].classList.add('mc-correct');
+        }
+        div.querySelector(`#mc-expl-${i}`).classList.add('show');
+      });
+      mc.appendChild(btn);
+    });
+    c.appendChild(div);
+  });
+}
+
+// ─── BUILD TAP STRESS ────────────────────────────────────────────────────────
+function buildTapStress() {
+  const c = document.getElementById('tap-stress-container');
+  TAP_STRESS.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'stress-tap-word';
+    div.innerHTML = `
+      <div class="stress-word-display">${item.word}</div>
+      <div class="syllable-buttons" id="syls-${i}"></div>
+      <div class="stress-feedback" id="sfb-${i}"></div>
+    `;
+    const syls = div.querySelector(`#syls-${i}`);
+    item.syllables.forEach((syl, si) => {
+      const btn = document.createElement('button');
+      btn.className = 'syl-btn';
+      btn.textContent = syl;
+      btn.addEventListener('click', () => {
+        syls.querySelectorAll('.syl-btn').forEach(b => b.disabled = true);
+        const fb = div.querySelector(`#sfb-${i}`);
+        if (si === item.correct) {
+          btn.classList.add('syl-correct');
+          fb.textContent = `✅ Correct! The stress is on "${syl}".`;
+          fb.className = 'stress-feedback show sf-correct';
+          addPoints(2);
+        } else {
+          btn.classList.add('syl-wrong');
+          syls.querySelectorAll('.syl-btn')[item.correct].classList.add('syl-correct');
+          fb.textContent = `❌ Not quite! The stress is on "${item.syllables[item.correct]}".`;
+          fb.className = 'stress-feedback show sf-wrong';
+        }
+      });
+      syls.appendChild(btn);
+    });
+    c.appendChild(div);
+  });
+}
+
+// ─── BUILD STRESS RECORD ─────────────────────────────────────────────────────
+function buildStressRecord() {
+  const c = document.getElementById('stress-record-container');
+  STRESS_RECORD_WORDS.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'record-card';
+    div.innerHTML = `
+      <div class="record-word">${item.emoji} ${item.word}</div>
+      <div style="font-size:0.85rem;color:var(--muted);margin-bottom:4px">Stress: <strong style="color:var(--yellow)">${item.stress}</strong></div>
+      <div class="record-steps">
+        <button class="step-btn listen" data-i="${i}">🔊 Listen</button>
+        <button class="step-btn record" data-i="${i}" disabled>🎙️ Record</button>
+        <button class="step-btn score" data-i="${i}" disabled>⭐ Score</button>
+        <span class="score-display" id="str-score-${i}"></span>
+      </div>
+    `;
+    const listenBtn = div.querySelector('.step-btn.listen');
+    const recordBtn = div.querySelector('.step-btn.record');
+    const scoreBtn = div.querySelector('.step-btn.score');
+    const scoreDisplay = div.querySelector(`#str-score-${i}`);
+    let heard = [];
+
+    listenBtn.addEventListener('click', () => {
+      speak(item.word, () => { recordBtn.disabled = false; });
+    });
+    recordBtn.addEventListener('click', () => {
+      startSpeechRecognition(recordBtn, item.word, (r) => {
+        heard = r;
+        scoreBtn.disabled = false;
+      });
+    });
+    scoreBtn.addEventListener('click', () => {
+      const sc = scoreMatch(heard, item.word);
+      const emoji = sc >= 80 ? '🌟' : sc >= 50 ? '👍' : '💪';
+      scoreDisplay.textContent = `${emoji} ${sc}%`;
+      if (sc >= 60) addPoints(2);
+    });
+
+    c.appendChild(div);
+  });
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  buildVocabGrid();
+  buildEvalCards();
+  buildListeningChallenge();
+  buildGrammarDialogues();
+  buildScramble();
+  buildKeyPhrases();
+  buildRecordResponse();
+  buildRealWorld();
+  buildTapStress();
+  buildStressRecord();
+});
+</script>
+</body>
+</html>
